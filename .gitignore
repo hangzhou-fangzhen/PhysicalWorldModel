@@ -1,0 +1,13 @@
+# Raw pipeline run outputs (hundreds of MB) — only curated copies live in assets/
+orange_juice-*/
+scene_init/
+frames/
+fields/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log
+
+# Agent runtime scaffolding (auto-generated skill cache)
+.agents/

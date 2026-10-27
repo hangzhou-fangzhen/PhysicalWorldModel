@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Physical World Model — Fluid Branch</title>
+<link rel="icon" type="image/svg+xml" href="assets/figures/favicon.svg" />
+<meta name="description" content="The Physical World Model predicts how physical state evolves in a scene. This release is the fluid branch: single-phase, incompressible, free-surface fluid scenes." />
+
+<!-- Fonts and styles: same stack as eliahuhorwitz/Academic-project-page-template.
+     That template is MIT licensed; its notice lives in LICENSE.md at the repo root,
+     and the <footer> carries the visible credit. Keep both. -->
+<link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" />
+<link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+
+<!-- ============================================================
+ Academic project page (eliahuhorwitz/Academic-project-page-template
+ layout, zero-build). English-only, approach-level: we introduce
+ the Physical World Model at a high level and state that this
+ release is the fluid branch. No pipeline, no equations, no
+ implementation details.
+ Author line: grep "authors" below.
+ ============================================================ -->
+
+<!-- ============================ hero ============================ -->
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <img class="brand-logo" src="assets/logo.png" alt="DEMX Logo" />
+          <h1 class="title is-1 publication-title">Physical World Model</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Hangzhou Suochen Simulation Technology Co., Ltd.</span>
+          </div>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Hangzhou &middot; 2026</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <span class="link-block">
+                <span class="external-link button is-normal is-rounded is-dark" aria-disabled="true">
+                  <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                  <span>Paper (coming soon)</span>
+                </span>
+              </span>
+              <span class="link-block">
+                <a href="#results" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fas fa-video"></i></span>
+                  <span>Results</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="#bibtex" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fas fa-book"></i></span>
+                  <span>BibTeX</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ teaser ============================ -->
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <div class="teaser-media">
+        <video class="teaser-video" src="assets/media/overlay_velocity.mp4" poster="assets/figures/poster_velocity.png" autoplay loop muted playsinline preload="metadata"></video>
+      </div>
+      <h2 class="subtitle has-text-centered teaser-caption">
+        The model rolls a fluid's physical state forward and draws the predicted velocity field back
+        onto the video, so the behaviour is visible — not only the appearance.
+      </h2>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ abstract ============================ -->
+<section class="section" id="abstract">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3">Abstract</h2>
+    <div class="content has-text-justified">
+      <p>
+        Generated video looks convincing but is <strong>not physical ground truth</strong>. The Physical
+        World Model takes a scene and predicts how its <strong>physical state evolves over time</strong>,
+        rather than only what it looks like. This page covers <strong>one branch of that effort: fluids</strong>.
+        Given a scene, the model <strong>infers the physical initial condition</strong> and rolls the fluid's
+        physical state forward — pressure, velocity, acceleration, collision response and density ratio — and
+        we draw those fields back onto the video so the physics is visible, not just plausible-looking pixels.
+      </p>
+      <div class="callout">
+        A key stance: <strong>the physical quantities are model predictions</strong> under explicit
+        scale assumptions. They are not calibrated measurements.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== why a Physical World Model ==================== -->
+<section class="section" id="why-physical-world-model">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3">Why a Physical World Model</h2>
+    <div class="content has-text-justified">
+      <p>
+        A scene is more than what it looks like. Beyond visual information, the world also contains
+        <strong>physics</strong> — how things move, push, deform and settle. That part is not optional
+        to the notion of a world: it is inseparable from it.
+      </p>
+      <p>
+        Looking real is <strong>not the same as being physically real</strong>. Today's mainstream
+        world models largely predict appearance only and <strong>do not output physical quantities</strong>;
+        what they predict is simply too narrow in scope. When a downstream model is handed
+        visual data alone, it has to infer the physics from scratch, which makes carrying out a task
+        substantially harder.
+      </p>
+      <p>
+        Completing the physical dimension is what lets a downstream model understand and perceive the
+        world more faithfully — and, in turn, produce more sensible <strong>action chunks</strong>.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ what we do ============================ -->
+<section class="section" id="what-we-do">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3">What our Physical World Model does</h2>
+    <div class="content has-text-justified">
+      <p>
+        Given <strong>an image and a text description</strong>, the Physical World Model predicts how the
+        world will evolve and returns the <strong>fluid's physical fields</strong> alongside the future
+        appearance. In other words, it does not stop at the next frame — it states the physical state
+        that frame is in.
+      </p>
+      <p>
+        The output video frames and the physical field data can be used to <strong>train a VLA</strong>,
+        so that the policy gains an explicit understanding of how the physical state of a given scene
+        changes over time, rather than having to guess it from pixels.
+      </p>
+      <div class="tag-list">
+        <span class="tag">Pressure</span>
+        <span class="tag">Velocity</span>
+        <span class="tag">Acceleration</span>
+        <span class="tag">Collision response</span>
+        <span class="tag">Density ratio</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ architecture ============================ -->
+<section class="section" id="architecture">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3">Architecture at a glance</h2>
+    <div class="content has-text-justified">
+      <p>
+        The model takes <strong>an image and text</strong> as input and produces
+        <strong>an image, a video and physical fields</strong> as output. The physical information is
+        carried through the same forward pass that renders the appearance, so what you watch and what
+        is measured describe the same event.
+      </p>
+    </div>
+    <figure class="image-fig">
+      <img src="assets/figures/architecture.svg" alt="Input image and text feed the Physical World Model, which outputs image, video and physical fields" loading="lazy" />
+      <figcaption>Inputs: image, text. Outputs: image, video, physical fields.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ============================ method ============================ -->
+<section class="section" id="method">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3">Method: input condition &rarr; physical evolution &rarr; frames &amp; data</h2>
+    <div class="content has-text-justified">
+      <p>
+        <strong>Input:</strong> an image and a text description of the action.
+      </p>
+      <p>
+        <strong>Process:</strong> the model combines the scene and the action to infer the physical
+        initial condition, advances the fluid evolution, and then uses the physical information to
+        generate the video.
+      </p>
+      <div class="callout">
+        Initial image + action description &rarr; infer physical initial condition &rarr; advance fluid
+        evolution &rarr; generate video (watchable / editable) plus physical fields and data
+        (comparable / analyzable).
+      </div>
+      <p>
+        <strong>Example:</strong> given a reference frame of a plastic bottle and a stemmed glass, and
+        the description &ldquo;slowly pour orange juice into the glass, then stop pouring&rdquo;, the
+        model outputs the corresponding pouring process together with the physical state at each moment
+        of that same process.
+      </p>
+      <p>
+        <strong>Stated scope:</strong> this release focuses on liquid pouring and refilling in
+        single- or dual-container scenes. Solid contact, multi-object interaction and open-environment
+        navigation are not covered &mdash; they are directions for later iterations, not capabilities of
+        this release.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ why fluids ============================ -->
+<section class="section" id="fluid-branch">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3">Why fluids first</h2>
+    <div class="content has-text-justified">
+      <p>
+        Fluids are among the hardest cases for appearance-only models: a pour can <em>look</em> right while
+        the dynamics are wrong. The timing of a splash, the shape of a jet and the settling of a free
+        surface all have to be correct together, and none of it can be judged from a single frame.
+        Learning the physical state, not just the appearance, is what lets a result be
+        <strong>checked</strong> instead of merely watched.
+      </p>
+      <p>
+        Fluids are also a domain whose physics is well understood, which makes them a sound
+        starting point. So this release is narrowly scoped on purpose — <strong>fluid scenes
+        only</strong>. The rest of the Physical World Model
+        (rigid bodies, contact, richer interaction) is not shown here.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ results ============================ -->
+<section class="section" id="results">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3">Sample outputs</h2>
+    <div class="content has-text-justified">
+      <p>
+        One fluid scene, solved by the model and shown with its physical fields drawn back on the
+        video so the behaviour is visible, not only the appearance.
+      </p>
+      <p>
+        Honest labelling: in this run the pressure clip is byte-identical to the combined overlay at
+        the end of the grid. The pressure channel's own render is <code>poster_pressure.png</code>,
+        the still that clip paints before playback.
+      </p>
+    </div>
+
+    <div class="columns is-multiline">
+      <div class="column is-half">
+        <figure class="image-fig">
+          <img src="assets/figures/case_initial_image.png" alt="generated initial frame" loading="lazy" />
+          <figcaption>Generated initial frame.</figcaption>
+        </figure>
+      </div>
+      <div class="column is-half">
+        <figure class="image-fig">
+          <video src="assets/media/source_rgb.mp4" poster="assets/figures/poster_source_rgb.png" controls loop muted playsinline preload="metadata"></video>
+          <figcaption>Video (scene appearance).</figcaption>
+        </figure>
+      </div>
+      <div class="column is-half">
+        <figure class="image-fig">
+          <video src="assets/media/overlay_pressure.mp4" poster="assets/figures/poster_pressure.png" controls loop muted playsinline preload="metadata"></video>
+          <figcaption>Pressure field.</figcaption>
+        </figure>
+      </div>
+      <div class="column is-half">
+        <figure class="image-fig">
+          <video src="assets/media/overlay_velocity.mp4" poster="assets/figures/poster_velocity.png" controls loop muted playsinline preload="metadata"></video>
+          <figcaption>Velocity field.</figcaption>
+        </figure>
+      </div>
+      <div class="column is-half">
+        <figure class="image-fig">
+          <video src="assets/media/overlay_accel.mp4" poster="assets/figures/poster_accel.png" controls loop muted playsinline preload="metadata"></video>
+          <figcaption>Acceleration field.</figcaption>
+        </figure>
+      </div>
+      <div class="column is-half">
+        <figure class="image-fig">
+          <video src="assets/media/overlay_collision.mp4" poster="assets/figures/poster_collision.png" controls loop muted playsinline preload="metadata"></video>
+          <figcaption>Collision response.</figcaption>
+        </figure>
+      </div>
+      <div class="column is-half">
+        <figure class="image-fig">
+          <video src="assets/media/overlay_density.mp4" poster="assets/figures/poster_density.png" controls loop muted playsinline preload="metadata"></video>
+          <figcaption>Density ratio.</figcaption>
+        </figure>
+      </div>
+      <div class="column is-half">
+        <figure class="image-fig">
+          <video src="assets/media/overlay_rgb.mp4" poster="assets/figures/poster_overlay_rgb.png" controls loop muted playsinline preload="metadata"></video>
+          <figcaption>Combined overlay.</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <figure class="image-fig wide">
+      <img src="assets/figures/case_channel_timelines.png" alt="per-channel physical timelines" loading="lazy" />
+      <figcaption>Per-frame physical channels over the rollout — pressure, velocity, acceleration, collision and density ratio.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ============================ data ============================ -->
+<section class="section" id="data">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3">From physics to data: still analyzable</h2>
+    <div class="content has-text-justified">
+      <p>
+        The output does not stop at &ldquo;looking&rdquo;: it can also feed downstream analysis.
+      </p>
+      <ul class="checklist">
+        <li><strong>Per-frame statistics (CSV):</strong> records the particle count over time along
+            with the mean and maximum of each physical quantity; for pressure, the standard deviation
+            and minimum are also kept. Well suited to comparing how the numbers change between moments:
+            a value that reaches a numerical bound is reported <em>at</em> that bound, so treat a
+            saturated maximum as an upper bound, not a measured peak, and compare the per-frame mean
+            across moments instead. Note that this is not equivalent to a full spatial distribution.</li>
+        <li><strong>Particle fields (NPZ):</strong> retains each particle's position, velocity and
+            physical quantities, usable for further work on spatial distributions, for organising task
+            data, and for research.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ scope ============================ -->
+<section class="section" id="scope">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3">Scope &amp; honest caveats</h2>
+    <div class="content">
+      <ul class="checklist">
+        <li>Single-phase, incompressible, free-surface fluids only. Steam, two-phase and
+            compressible flow are outside the current scope.</li>
+        <li>The physics is produced by a <strong>learned model</strong>, not an authoritative reference;
+            it is internally consistent but its agreement with a classical solver has not been certified.</li>
+        <li>Coupling is one-way for now — the fluid is displayed in the scene; it does not yet push
+            the container or a robot.</li>
+        <li>Physical quantities are <strong>model predictions</strong> under explicit scale
+            assumptions, not calibrated measurements.</li>
+        <li>Reported velocity and pressure extremes are clamped to numerical bounds: where a field
+            saturates, the maximum is the bound rather than a physical peak &mdash; use the per-frame
+            mean when a single characteristic number is needed.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ roadmap ============================ -->
+<section class="section" id="roadmap">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3">What's next</h2>
+    <div class="content has-text-justified">
+      <p>
+        This fluid branch is one step of a larger effort. Next we will cover solid mechanics, starting
+        with <strong>quasi-static creep</strong> scenarios, and grow the model toward a much wider
+        range of scenes — well beyond fluids.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ citation ============================ -->
+<section class="section" id="bibtex">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3">BibTeX</h2>
+    <p class="bibtex-intro">Full BibTeX will follow publication. For now you may cite this project page:</p>
+    <div class="bibtex-body">
+      <pre id="bibtex-code">@misc{worldphysicalmodel_fluids2026,
+  title  = {Physical World Model (Fluid Branch)},
+  author = {Hangzhou Suochen Simulation Technology Co., Ltd.},
+  year   = {2026},
+  note   = {Project page}
+}</pre>
+      <button class="copy-btn" id="copy-bibtex" type="button">Copy</button>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container is-max-desktop">
+    <div class="content has-text-centered">
+      <p>
+        &copy; 2026 Hangzhou Suochen Simulation Technology Co., Ltd. &middot; Project page.
+      </p>
+      <p class="template-credit">
+        Page layout adapted from the
+        <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank" rel="noopener">Academic Project Page Template</a>
+        (MIT) &middot; icons by
+        <a href="https://fontawesome.com/" target="_blank" rel="noopener">Font Awesome Free</a> (CC BY 4.0)
+        &middot; <a href="LICENSE.md">License</a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ponytail: one tiny copy handler, no build step.
+  document.getElementById('copy-bibtex').addEventListener('click', function () {
+    var btn = this;
+    navigator.clipboard.writeText(document.getElementById('bibtex-code').textContent).then(function () {
+      btn.textContent = 'Copied!';
+      setTimeout(function () { btn.textContent = 'Copy'; }, 1500);
+    });
+  });
+</script>
+
+</body>
+</html>

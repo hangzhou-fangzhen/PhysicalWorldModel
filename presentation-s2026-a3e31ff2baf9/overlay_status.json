@@ -1,0 +1,9 @@
+{
+  "status": "complete",
+  "outputs": {
+    "frames": 121,
+    "fps": 24.0,
+    "evaluated_frames": 121,
+    "unevaluated_frames": 0
+  }
+}

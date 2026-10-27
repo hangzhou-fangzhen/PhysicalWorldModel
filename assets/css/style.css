@@ -1,0 +1,166 @@
+/* World Physical Model (fluid branch)
+   Academic project page. Layout and look follow
+   eliahuhorwitz/Academic-project-page-template (MIT — see LICENSE.md at the repo
+   root for the notice and its scope): Bulma + Font Awesome are loaded from CDN
+   in index.html, and this file only carries the small set of overrides the
+   template itself uses. */
+
+body {
+  font-family: 'Noto Sans', sans-serif;
+}
+
+/* ---------------- publication header ---------------- */
+.publication-title {
+  font-family: 'Google Sans', sans-serif;
+}
+
+.brand-logo {
+  height: 42px;
+  width: auto;
+  margin-bottom: 1.5rem;
+}
+
+.publication-authors {
+  font-family: 'Google Sans', sans-serif;
+}
+
+.author-block {
+  display: inline-block;
+}
+
+.publication-links {
+  margin-top: 1rem;
+}
+
+.link-block a,
+.link-block .button {
+  margin: 5px 6px;
+}
+
+/* ---------------- teaser ---------------- */
+.hero.teaser {
+  padding-top: 0;
+}
+
+.teaser .hero-body {
+  padding-top: 0;
+  padding-bottom: 3rem;
+}
+
+.teaser-video {
+  width: 100%;
+  border-radius: 5px;
+  display: block;
+  background: #000;
+}
+
+.teaser-caption {
+  margin-top: 1.5rem;
+  font-weight: 400;
+  color: #4a4a4a;
+}
+
+/* ---------------- figures ---------------- */
+.image-fig {
+  margin: 0;
+  text-align: center;
+}
+
+.image-fig img,
+.image-fig video {
+  width: 100%;
+  border-radius: 5px;
+  display: block;
+  background: #000;
+}
+
+.image-fig figcaption {
+  font-size: 0.9rem;
+  color: #4a4a4a;
+  margin-top: 0.6rem;
+}
+
+.image-fig.wide {
+  margin: 2rem auto 0;
+}
+
+.image-fig.wide img {
+  background: #fff;
+}
+
+/* ponytail: play-glyph overlays removed — no icon is stamped over any video. */
+
+/* ---------------- callout ---------------- */
+.callout {
+  background: #f5f5f5;
+  border-left: 4px solid #363636;
+  padding: 1rem 1.25rem;
+  border-radius: 4px;
+  margin-top: 1.5rem;
+  color: #363636;
+  font-size: 0.95rem;
+}
+
+/* ---------------- tags ---------------- */
+.tag-list {
+  margin-top: 1rem;
+}
+
+.tag-list .tag {
+  margin: 0 0.4rem 0.5rem 0;
+}
+
+/* ---------------- checklist ---------------- */
+.checklist {
+  list-style: none;
+  margin-left: 0;
+}
+
+.checklist li {
+  padding: 0.6rem 0;
+  border-bottom: 1px solid #dbdbdb;
+}
+
+.checklist li:last-child {
+  border-bottom: 0;
+}
+
+/* ---------------- footer credit ---------------- */
+.template-credit {
+  font-size: 0.85rem;
+  color: #7a7a7a;
+  margin-top: 0.5rem;
+}
+
+.template-credit a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+/* ---------------- bibtex ---------------- */
+.bibtex-body {
+  position: relative;
+}
+
+.bibtex-body pre {
+  background: #f5f5f5;
+  border-radius: 5px;
+  padding: 1.25rem;
+  overflow-x: auto;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.8rem;
+  border: 1px solid #dbdbdb;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.copy-btn:hover {
+  background: #f5f5f5;
+}
