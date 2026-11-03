@@ -84,6 +84,10 @@ body {
   margin: 2rem auto 0;
 }
 
+.image-fig.wide a {
+  display: block;
+}
+
 .image-fig.wide img {
   background: #fff;
 }
@@ -163,4 +167,195 @@ body {
 
 .copy-btn:hover {
   background: #f5f5f5;
+}
+
+/* ================================================================
+ Responsive layout
+ Bulma is desktop-first: .columns already stacks below 769px, but
+ everything sized for a 960px column (3rem headings, 3rem section
+ padding, justified body copy, three inline pills) stays oversized
+ on a phone. These rules turn the page into one readable column,
+ one figure per row, with no horizontal scrolling.
+ ================================================================ */
+
+html {
+  -webkit-text-size-adjust: 100%;   /* iOS must not re-inflate type in landscape */
+}
+
+body {
+  overflow-x: hidden;               /* nothing may drag the viewport sideways */
+  overflow-wrap: break-word;
+}
+
+.teaser-media,
+.image-fig,
+.image-fig img,
+.image-fig video {
+  max-width: 100%;
+}
+
+/* ---------------- tablets and below (<= 1024px) ---------------- */
+@media screen and (max-width: 1024px) {
+  .publication-title.title.is-1 {
+    font-size: 2.4rem;
+  }
+}
+
+/* ---------------- phones (<= 768px) ---------------- */
+@media screen and (max-width: 768px) {
+  /* vertical rhythm: 3rem section padding is desktop-scale */
+  .section {
+    padding: 2rem 1rem;
+  }
+
+  .hero-body {
+    padding: 1.75rem 1rem;
+  }
+
+  .hero.teaser .hero-body {
+    padding-top: 0;
+    padding-bottom: 2rem;
+  }
+
+  .footer {
+    padding: 2rem 1rem;
+  }
+
+  /* ---- header ---- */
+  .brand-logo {
+    height: 34px;
+    margin-bottom: 1rem;
+  }
+
+  .publication-title.title.is-1 {
+    font-size: 1.9rem;
+    line-height: 1.2;
+    margin-bottom: 0.75rem;
+  }
+
+  .publication-authors.is-size-5 {
+    font-size: 1rem !important;
+  }
+
+  .publication-links {
+    margin-top: 0.75rem;
+  }
+
+  .link-block a,
+  .link-block .button {
+    margin: 4px 3px;
+    font-size: 0.9rem;
+  }
+
+  /* ---- body copy ---- */
+  /* justified text opens rivers on a narrow column: go ragged-right */
+  .content.has-text-justified {
+    text-align: left !important;
+    font-size: 0.98rem;
+  }
+
+  .title.is-3 {
+    font-size: 1.45rem;
+    margin-bottom: 1rem;
+  }
+
+  .subtitle.teaser-caption {
+    font-size: 0.95rem;
+    margin-top: 1rem;
+  }
+
+  /* ---- figures: one per row, tight captions ---- */
+  .columns.is-multiline .column.is-half {
+    padding: 0.4rem 0.75rem;
+  }
+
+  .image-fig {
+    margin-bottom: 1.25rem;
+  }
+
+  .image-fig figcaption {
+    font-size: 0.82rem;
+    margin-top: 0.5rem;
+  }
+
+  .image-fig.wide {
+    margin-top: 1.5rem;
+  }
+
+  .callout {
+    margin-top: 1.25rem;
+    padding: 0.85rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .tag-list .tag {
+    font-size: 0.75rem;
+  }
+
+  .checklist li {
+    padding: 0.55rem 0;
+    font-size: 0.95rem;
+  }
+
+  /* ---- bibtex: scrolls inside its own box, copy button shrinks ---- */
+  .bibtex-body pre {
+    font-size: 0.72rem;
+    line-height: 1.5;
+    padding: 0.9rem 0.85rem;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .copy-btn {
+    top: 0.4rem;
+    right: 0.4rem;
+    padding: 0.22rem 0.6rem;
+    font-size: 0.72rem;
+  }
+
+  .template-credit {
+    font-size: 0.78rem;
+  }
+}
+
+/* ---------------- small phones (<= 480px) ---------------- */
+@media screen and (max-width: 480px) {
+  .publication-title.title.is-1 {
+    font-size: 1.65rem;
+  }
+
+  /* one full-width button per row: easier to hit than three ragged pills */
+  .publication-links {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+    max-width: 280px;
+    margin: 0.75rem auto 0;
+  }
+
+  .link-block {
+    display: block;
+  }
+
+  .link-block a,
+  .link-block .button,
+  .link-block .button[aria-disabled="true"] {
+    display: flex;
+    width: 100%;
+    max-width: none;
+    justify-content: center;
+    margin: 0;
+  }
+
+  .title.is-3 {
+    font-size: 1.3rem;
+  }
+
+  .content.has-text-justified {
+    font-size: 0.95rem;
+  }
+
+  .checklist li {
+    font-size: 0.92rem;
+  }
 }
