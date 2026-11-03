@@ -9,7 +9,7 @@ velocity, acceleration, collision response and density ratio — and those field
 are drawn back onto the video so the behaviour is visible, not just the
 appearance.
 
-- Live page: https://hangzhou-fangzhen.github.io/WorldPhysicalModel/
+- Live page: https://hangzhou-fangzhen.github.io/PhysicalWorldModel/
 - This repository contains **only the static project page** (HTML/CSS + figures
   + result media). No source code, notebooks, or model weights are published here.
 - The page is deliberately **English-only** and **approach-level** — it introduces
